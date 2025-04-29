@@ -1,0 +1,16 @@
+﻿<Window x:Class="GoodStorage.ManageGroupsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoodStorage"
+        mc:Ignorable="d"
+        Title="Управление группами" Height="282" Width="364">
+    <Grid>
+        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="185,90,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="addGroupButton" Content="Создать группу" HorizontalAlignment="Left" Margin="45,128,0,0" VerticalAlignment="Top" Width="120" Height="22" Click="AddGroupButton_Click"/>
+        <TextBox x:Name="groupNameTextBox" HorizontalAlignment="Left" Height="23" Margin="45,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="removeGroupButton" Content="Удалить группу" HorizontalAlignment="Left" Margin="185,128,0,0" VerticalAlignment="Top" Width="120" Height="22" Click="RemoveGroupButton_Click"/>
+
+    </Grid>
+</Window>

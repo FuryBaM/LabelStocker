@@ -1,0 +1,31 @@
+﻿<Window x:Class="GoodStorage.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoodStorage"
+        mc:Ignorable="d"
+        Title="Главная" Height="522" Width="919"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        Closing="Window_Closing">
+    <Grid>
+        <DataGrid x:Name="goodDataGrid" HorizontalAlignment="Left" Height="340" Margin="20,40,0,0" VerticalAlignment="Top" Width="565" SelectionMode="Single" ItemsSource="{Binding database.Goods}" SelectionChanged="GoodDataGrid_SelectionChanged" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding name}" ClipboardContentBinding="{x:Null}" Header="Название" SortDirection="Ascending"/>
+                <DataGridTextColumn Binding="{Binding price}" ClipboardContentBinding="{x:Null}" Header="Цена"/>
+                <DataGridTextColumn Binding="{Binding id}" ClipboardContentBinding="{x:Null}" Header="ID" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding barcode}" ClipboardContentBinding="{x:Null}" Header="Штрихкод"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="addGoodButton" Content="Добавить товар" HorizontalAlignment="Left" Margin="630,40,0,0" VerticalAlignment="Top" Width="120" Click="AddGoodButton_Click" Height="30"/>
+        <Button x:Name="createGroupButton" Content="Управлять группами" HorizontalAlignment="Left" Margin="630,90,0,0" VerticalAlignment="Top" Width="120" Click="CreateGroupButton_Click" Height="30"/>
+        <ComboBox x:Name="printersComboBox" HorizontalAlignment="Left" Margin="630,150,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="printTagButton" Content="Распечатать ценник" HorizontalAlignment="Left" Margin="630,200,0,0" VerticalAlignment="Top" Width="120" Click="PrintTagButton_Click"/>
+        <Border BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Margin="595,262,0,0" Height="200" Width="290" HorizontalAlignment="Left">
+            <Image x:Name="image" Height="200" VerticalAlignment="Top" Margin="-1" Width="290"/>
+        </Border>
+        <Button x:Name="showTagButton" Content="Показать ценник" HorizontalAlignment="Left" Margin="630,237,0,0" VerticalAlignment="Top" Width="120" Click="ShowTagButton_Click"/>
+        <Label x:Name="debugLabel" Content="Label" HorizontalAlignment="Left" Margin="20,365,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="searchGoodButton" HorizontalAlignment="Left" Height="23" Margin="20,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="565" TextChanged="SearchGoodButton_TextChanged"/>
+    </Grid>
+</Window>
