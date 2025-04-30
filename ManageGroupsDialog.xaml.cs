@@ -12,20 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace GoodStorage
+namespace ProductStorage
 {
     /// <summary>
     /// Логика взаимодействия для ManageGroupsDialog.xaml
     /// </summary>
     public partial class ManageGroupsDialog : Window
     {
-        private GoodDatabase _database;
-        public ManageGroupsDialog(GoodDatabase database)
+        private ProductDatabase _database;
+        public ManageGroupsDialog(ProductDatabase database)
         {
             InitializeComponent();
             _database = database;
             var groups = database.GetGroups();
-            foreach (GoodGroup group in groups)
+            foreach (ProductGroup group in groups)
             {
                 var item = new ComboBoxItem();
                 item.Content = group.name;
@@ -38,11 +38,11 @@ namespace GoodStorage
         {
             if (!string.IsNullOrWhiteSpace(groupNameTextBox.Text))
             {
-                GoodGroup goodGroup = new GoodGroup { name = groupNameTextBox.Text, goods = new List<Good>(), id = 0 };
-                if (_database.AddGroup(goodGroup))
+                ProductGroup productGroup = new ProductGroup { name = groupNameTextBox.Text, products = new List<Product>(), id = 0 };
+                if (_database.AddGroup(productGroup))
                 {
                     var item = new ComboBoxItem();
-                    item.Content = goodGroup.name;
+                    item.Content = productGroup.name;
                     comboBox.Items.Add(item);
                 }
             }

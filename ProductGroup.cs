@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoodStorage
+namespace ProductStorage
 {
-    public class GoodGroup
+    public class ProductGroup
     {
         public int id { get; set; }
         public string name { get; set; }
-        public List<Good> goods { get; set; }
+        public List<Product> products { get; set; }
     }
 }

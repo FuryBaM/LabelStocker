@@ -13,21 +13,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace GoodStorage
+namespace ProductStorage
 {
     /// <summary>
     /// Логика взаимодействия для AddGoodDialog.xaml
     /// </summary>
-    public partial class AddGoodDialog : Window
+    public partial class AddProductDialog : Window
     {
-        private GoodDatabase _database;
-        private Good _good;
-        public AddGoodDialog(GoodDatabase database)
+        private ProductDatabase _database;
+        private Product _product;
+        public AddProductDialog(ProductDatabase database)
         {
             InitializeComponent();
             _database = database;
             var groups = database.GetGroups();
-            foreach (GoodGroup group in groups) {
+            foreach (ProductGroup group in groups) {
                 var item = new ComboBoxItem();
                 item.Content = group.name;
                 comboBox.Items.Add(item);
@@ -41,9 +41,9 @@ namespace GoodStorage
             priceTextBox.Focus();
         }
 
-        public Good GetResult()
+        public Product GetResult()
         {
-            return _good;
+            return _product;
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -67,9 +67,9 @@ namespace GoodStorage
             }
             if (canCreate == true)
             {
-                _good = new Good { name = nameTextBox.Text, price = Convert.ToUInt32(priceTextBox.Text), groupName = _database.GetGroupWithName("Прочее").name };
-                _database.AddGood(_good);
-                _database.AddToGroup(_database.GetGroupWithName(comboBox.Text), _good);
+                _product = new Product { name = nameTextBox.Text, price = Convert.ToUInt32(priceTextBox.Text), groupName = _database.GetGroupWithName("Прочее").name };
+                _database.AddProduct(_product);
+                _database.AddToGroup(_database.GetGroupWithName(comboBox.Text), _product);
                 DialogResult = true;
             }
         }

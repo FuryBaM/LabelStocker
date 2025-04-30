@@ -14,31 +14,31 @@ using IronBarCode;
 using HidLibrary;
 
 
-namespace GoodStorage
+namespace ProductStorage
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public GoodDatabase database = new GoodDatabase();
-        private Good selectedGood = null;
+        public ProductDatabase database = new ProductDatabase();
+        private Product selectedProduct = null;
         private string scannedData = "";
         public MainWindow()
         {
             InitializeComponent();
             ShowPrinters();
-            database.OnGoodCreate += OnGoodCreate;
+            database.OnProductCreate += OnProductCreate;
             //GetDevice();
             //SelectKeyboard(availableKeyboards[0]);
         }
 
         public void ResetDataGrid()
         {
-            goodDataGrid.Items.Clear();
-            foreach (Good good in database.Goods)
+            productDataGrid.Items.Clear();
+            foreach (Product product in database.Products)
             {
-                goodDataGrid.Items.Add(good);
+                productDataGrid.Items.Add(product);
             }
         }
         private void Window_PreviewKeyDown(object sender,  KeyEventArgs e)
@@ -68,28 +68,28 @@ namespace GoodStorage
             debugLabel.Content = "";
         }
 
-        private void AddGoodButton_Click(object sender, RoutedEventArgs e)
+        private void AddProductButton_Click(object sender, RoutedEventArgs e)
         {
-            AddGoodDialog addGoodDialog = new AddGoodDialog(database);
-            if (addGoodDialog.ShowDialog() == true)
-                if (addGoodDialog.GetResult() != null)
+            AddProductDialog addProductDialog = new AddProductDialog(database);
+            if (addProductDialog.ShowDialog() == true)
+                if (addProductDialog.GetResult() != null)
                 {
-                    MessageBox.Show($"Товар {addGoodDialog.GetResult().name} создан");
+                    MessageBox.Show($"Товар {addProductDialog.GetResult().name} создан");
                 }
         }
 
-        private void OnGoodCreate(Good good)
+        private void OnProductCreate(Product product)
         {
-            goodDataGrid.Items.Add(good);
+            productDataGrid.Items.Add(product);
         }
 
         private void CreateGroupButton_Click(object sender, RoutedEventArgs e)
         {
-            ManageGroupsDialog addGoodDialog = new ManageGroupsDialog(database);
-            addGoodDialog.ShowDialog();
+            ManageGroupsDialog addProductDialog = new ManageGroupsDialog(database);
+            addProductDialog.ShowDialog();
         }
 
-        private Bitmap CreateLabelImage(Good good)
+        private Bitmap CreateLabelImage(Product product)
         {
             int width = 29*24;
             int height = 20*24;
@@ -111,15 +111,15 @@ namespace GoodStorage
                     Trimming = StringTrimming.Character
                 };
                 RectangleF nameRect = new RectangleF(x, 0, width - x, 200 - y);
-                graphics.DrawString(s: good.name, font: nameFont, brush: System.Drawing.Brushes.Black, layoutRectangle: nameRect, format: textFormat);
+                graphics.DrawString(s: product.name, font: nameFont, brush: System.Drawing.Brushes.Black, layoutRectangle: nameRect, format: textFormat);
                 RectangleF priceRect = new RectangleF(x, y + 360, width - x, 100 - y);
-                graphics.DrawString(s: $"Цена {good.price}", font: priceFont, brush: System.Drawing.Brushes.Black, layoutRectangle: priceRect, format: textFormat);
+                graphics.DrawString(s: $"Цена {product.price}", font: priceFont, brush: System.Drawing.Brushes.Black, layoutRectangle: priceRect, format: textFormat);
                 RectangleF codeRect = new RectangleF(x, y + 270, width - x, 100 - y);
                 //graphics.FillRectangle(System.Drawing.Brushes.White, codeRect);
-                var myBarcode = BarcodeWriter.CreateBarcode(CalculateEan13("2" + "00000" + good.id.ToString("000000")), BarcodeWriterEncoding.EAN13, 600, 120);
+                var myBarcode = BarcodeWriter.CreateBarcode(CalculateEan13("2" + "00000" + product.id.ToString("000000")), BarcodeWriterEncoding.EAN13, 600, 120);
                 System.Drawing.Image image = myBarcode.Image;
                 graphics.DrawImage(image, (width - image.Width) / 2, 160);
-                graphics.DrawString(s: CalculateEan13("2" + "00000" + good.id.ToString("000000")), font: codeFont, brush: System.Drawing.Brushes.Black, layoutRectangle: codeRect, format: textFormat);
+                graphics.DrawString(s: CalculateEan13("2" + "00000" + product.id.ToString("000000")), font: codeFont, brush: System.Drawing.Brushes.Black, layoutRectangle: codeRect, format: textFormat);
             }
             return labelImage;
         }
@@ -139,10 +139,10 @@ namespace GoodStorage
 
         private void PrintPriceTag()
         {
-            Good good = selectedGood;
-            if (good != null)
+            Product product = selectedProduct;
+            if (product != null)
             {
-                Bitmap bitmap = CreateLabelImage(good);
+                Bitmap bitmap = CreateLabelImage(product);
                 PrintDocument pd = new PrintDocument();
                 pd.PrinterSettings.PrinterName = printersComboBox.Text;
                 pd.PrintPage += (sender, e) =>
@@ -164,9 +164,9 @@ namespace GoodStorage
 
         private void ShowTagButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedGood != null)
+            if (selectedProduct != null)
             {
-                var handle = CreateLabelImage(selectedGood).GetHbitmap();
+                var handle = CreateLabelImage(selectedProduct).GetHbitmap();
                 ImageSource imageSource = Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 image.Source = imageSource;
             }
@@ -176,16 +176,16 @@ namespace GoodStorage
             }
         }
 
-        private void GoodDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ProductDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (goodDataGrid.SelectedIndex != -1)
+            if (productDataGrid.SelectedIndex != -1)
             {
-                Good good = (Good)goodDataGrid.SelectedItem;
-                selectedGood = good;
+                Product product = (Product)productDataGrid.SelectedItem;
+                selectedProduct = product;
             }
             else
             {
-                selectedGood = null;
+                selectedProduct = null;
             }
         }
 
@@ -215,17 +215,17 @@ namespace GoodStorage
             return $"{temp}{checkSum}";
         }
 
-        private void SearchGoodButton_TextChanged(object sender, TextChangedEventArgs e)
+        private void SearchProductButton_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(searchGoodButton.Text))
+            if (!string.IsNullOrWhiteSpace(searchProductButton.Text))
             {
-                goodDataGrid.Items.Clear();
-                Regex regex = new Regex($@"{searchGoodButton.Text}", RegexOptions.IgnoreCase);
-                foreach (Good good in database.Goods)
+                productDataGrid.Items.Clear();
+                Regex regex = new Regex($@"{searchProductButton.Text}", RegexOptions.IgnoreCase);
+                foreach (Product product in database.Products)
                 {
-                    if (regex.IsMatch(good.name))
+                    if (regex.IsMatch(product.name))
                     {
-                        goodDataGrid.Items.Add(good);
+                        productDataGrid.Items.Add(product);
                     }
                 }
             }

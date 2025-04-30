@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace GoodStorage
+namespace ProductStorage
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml
