@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProductStorage
+namespace LabelStocker
 {
     public class Product
     {
@@ -9,10 +9,6 @@ namespace ProductStorage
         public uint id { set; get; }
         public int barcode { set; get; }
         public string groupName { set; get; }
-        public string description { set; get; }
-        public string unit { set; get; }
-        public string country { set; get; }
-        public string manufacturer { set; get; }
     }
 }
 

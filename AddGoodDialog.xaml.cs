@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ProductStorage
+namespace LabelStocker
 {
     /// <summary>
     /// Логика взаимодействия для AddGoodDialog.xaml
@@ -67,9 +67,9 @@ namespace ProductStorage
             }
             if (canCreate == true)
             {
-                _product = new Product { name = nameTextBox.Text, price = Convert.ToUInt32(priceTextBox.Text), groupName = _database.GetGroupWithName("Прочее").name };
-                _database.AddProduct(_product);
-                _database.AddToGroup(_database.GetGroupWithName(comboBox.Text), _product);
+                _product = new Product { name = nameTextBox.Text, price = Convert.ToUInt32(priceTextBox.Text), groupName = _database.FindGroupByName("Прочее").name };
+                _database.CreateProduct(_product);
+                _database.AddProductToGroup(_database.FindGroupByName(comboBox.Text), _product);
                 DialogResult = true;
             }
         }

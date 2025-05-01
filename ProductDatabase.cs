@@ -8,7 +8,7 @@ using System.IO;
 using CsvHelper.Configuration;
 using System.Globalization;
 
-namespace ProductStorage
+namespace LabelStocker
 {
     public class ProductDatabase
     {
@@ -23,16 +23,15 @@ namespace ProductStorage
 
         public ProductDatabase()
         {
-            Load();
             if (_productGroups.Where(x=>x.name == defaultGroup).Count() == 0)
             {
-                AddGroup(new ProductGroup { name = defaultGroup, products = new List<Product>(), id = 0 });
+                CreateGroup(new ProductGroup { name = defaultGroup, products = new List<Product>(), id = 0 });
             }
         }
 
         public List<ProductGroup> GetGroups() => _productGroups;
 
-        public bool AddGroup(ProductGroup productGroup)
+        public bool CreateGroup(ProductGroup productGroup)
         {
             int maxId = 0;
             if (_productGroups.Count > 0)
@@ -65,7 +64,7 @@ namespace ProductStorage
             return false;
         }
 
-        public void AddProduct(Product product)
+        public void CreateProduct(Product product)
         {
             int maxId = 0;
             if (_products.Count > 0)
@@ -74,7 +73,7 @@ namespace ProductStorage
             {
                 product.id = Convert.ToUInt32(maxId) + 1;
             }
-            product.groupName = GetGroupWithName(defaultGroup).name;
+            product.groupName = FindGroupByName(defaultGroup).name;
             _products.Add(product);
             OnProductCreate?.Invoke(product);
         }
@@ -90,14 +89,14 @@ namespace ProductStorage
             return false;
         }
 
-        public bool AddToGroup(ProductGroup productGroup, Product product)
+        public bool AddProductToGroup(ProductGroup productGroup, Product product)
         {
             if (!productGroup.products.Contains(product))
             {
-                var currentProductGroup = GetGroupWithName(product.groupName);
+                var currentProductGroup = FindGroupByName(product.groupName);
                 if (currentProductGroup != null)
                 {
-                    RemoveFromGroup(currentProductGroup, product);
+                    RemoveProductFromGroup(currentProductGroup, product);
                 }
                 product.groupName = productGroup.name;
                 productGroup.products.Add(product);
@@ -107,18 +106,18 @@ namespace ProductStorage
         }
 
 
-        public bool RemoveFromGroup(ProductGroup productGroup, Product product)
+        public bool RemoveProductFromGroup(ProductGroup productGroup, Product product)
         {
             if (productGroup.products.Contains(product))
             {
                 productGroup.products.Remove(product);
-                product.groupName = GetGroupWithName(defaultGroup).name;
+                product.groupName = FindGroupByName(defaultGroup).name;
                 return true;
             }
             return false;
         }
 
-        public ProductGroup GetGroupWithName(string name)
+        public ProductGroup FindGroupByName(string name)
         {
             try
             {
@@ -130,7 +129,7 @@ namespace ProductStorage
             }
         }
 
-        public Product GetProductByName(string name)
+        public Product FindProductByName(string name)
         {
             try
             {
@@ -172,39 +171,36 @@ namespace ProductStorage
 
                 if (!File.Exists(groupPath) || !File.Exists(productsFilePath)) return false;
 
-                List<ProductGroup> groups;
                 using (StreamReader streamReader = new StreamReader(groupPath))
                 {
                     using (CsvReader csvReader = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture)))
                     {
-                        groups = csvReader.GetRecords<ProductGroup>().ToList();
+                        _productGroups = csvReader.GetRecords<ProductGroup>().ToList();
                     }
                 }
 
-                List<Product> products;
                 using (StreamReader streamReader = new StreamReader(productsFilePath))
                 {
                     using (CsvReader csvReader = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture)))
                     {
-                        products = csvReader.GetRecords<Product>().ToList();
+                        _products = csvReader.GetRecords<Product>().ToList();
                     }
                 }
-                for (int i = 0; i < groups.Count; i++)
+                for (int i = 0; i < _productGroups.Count; i++)
                 {
-                    groups[i].products = new List<Product>();
-                    Console.WriteLine(groups[i]);
+                    _productGroups[i].products = new List<Product>();
+                    Console.WriteLine(_productGroups[i]);
                 }
-                _productGroups = groups;
-                for (int i = 0; i < products.Count; i++)
+                for (int i = 0; i < _products.Count; i++)
                 {
-                    Console.WriteLine(products[i].groupName);
+                    Console.WriteLine(_products[i].groupName);
                 }
-                _products = products;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
+            Console.WriteLine(_products.Count);
             return true;
         }
     }

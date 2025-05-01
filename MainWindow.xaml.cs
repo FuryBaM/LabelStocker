@@ -14,21 +14,23 @@ using IronBarCode;
 using HidLibrary;
 
 
-namespace ProductStorage
+namespace LabelStocker
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ProductDatabase database = new ProductDatabase();
-        private Product selectedProduct = null;
+        public ProductDatabase database;
+        private Product selectedProduct;
         private string scannedData = "";
         public MainWindow()
         {
             InitializeComponent();
             ShowPrinters();
+            database = new ProductDatabase();
             database.OnProductCreate += OnProductCreate;
+            database.Load();
             //GetDevice();
             //SelectKeyboard(availableKeyboards[0]);
         }

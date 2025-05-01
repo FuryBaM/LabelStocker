@@ -1,15 +1,15 @@
-﻿<Window x:Class="ProductStorage.MainWindow"
+﻿<Window x:Class="LabelStocker.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ProductStorage"
+        xmlns:local="clr-namespace:LabelStocker"
         mc:Ignorable="d"
         Title="Главная" Height="522" Width="919"
         PreviewKeyDown="Window_PreviewKeyDown"
         Closing="Window_Closing">
     <Grid>
-        <DataGrid x:Name="productDataGrid" HorizontalAlignment="Left" Height="340" Margin="20,40,0,0" VerticalAlignment="Top" Width="565" SelectionMode="Single" ItemsSource="{Binding database.Products}" SelectionChanged="ProductDataGrid_SelectionChanged" IsReadOnly="True">
+        <DataGrid x:Name="productDataGrid" HorizontalAlignment="Left" Height="340" Margin="20,40,0,0" VerticalAlignment="Top" Width="565" SelectionMode="Single" ItemsSource="{Binding database.Products, IsAsync=True, StringFormat=\{0:d\}}" SelectionChanged="ProductDataGrid_SelectionChanged" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding name}" ClipboardContentBinding="{x:Null}" Header="Название" SortDirection="Ascending"/>
                 <DataGridTextColumn Binding="{Binding price}" ClipboardContentBinding="{x:Null}" Header="Цена"/>

@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ProductStorage
+namespace LabelStocker
 {
     /// <summary>
     /// Логика взаимодействия для ManageGroupsDialog.xaml
@@ -39,7 +39,7 @@ namespace ProductStorage
             if (!string.IsNullOrWhiteSpace(groupNameTextBox.Text))
             {
                 ProductGroup productGroup = new ProductGroup { name = groupNameTextBox.Text, products = new List<Product>(), id = 0 };
-                if (_database.AddGroup(productGroup))
+                if (_database.CreateGroup(productGroup))
                 {
                     var item = new ComboBoxItem();
                     item.Content = productGroup.name;
@@ -50,7 +50,7 @@ namespace ProductStorage
 
         private void RemoveGroupButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_database.RemoveGroup(_database.GetGroupWithName(comboBox.SelectionBoxItem.ToString())))
+            if (_database.RemoveGroup(_database.FindGroupByName(comboBox.SelectionBoxItem.ToString())))
             {
                 comboBox.Items.RemoveAt(comboBox.SelectedIndex);
                 comboBox.SelectedIndex = 0;
